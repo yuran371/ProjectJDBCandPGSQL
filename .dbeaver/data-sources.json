@@ -15,8 +15,8 @@
 				"home": "postgresql_client",
 				"type": "dev",
 				"provider-properties": {
-					"@dbeaver-show-non-default-db@": "false",
-					"@dbeaver-show-template-db@": "false",
+					"@dbeaver-show-non-default-db@": "true",
+					"@dbeaver-show-template-db@": "true",
 					"@dbeaver-show-unavailable-db@": "false",
 					"show-database-statistics": "false",
 					"@dbeaver-read-all-data-types-db@": "false",

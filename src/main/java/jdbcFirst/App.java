@@ -1,4 +1,4 @@
-package jdbcFirst.JDBCPostgreSQL;
+package jdbcFirst;
 
 /**
  * Hello world!
