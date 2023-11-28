@@ -1,10 +1,11 @@
 package jdbcFirst;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.postgresql.Driver;
 
@@ -13,6 +14,9 @@ import jdbcFirst.util.ConnectionManager;
 public class JdbcRunner {
 	public static void main(String[] args) throws SQLException{
 		Class<Driver> driverClass = Driver.class;
+/*
+ *  005 Statement. DDL операции
+*/
 		String sql1 = """
 				CREATE TABLE IF NOT EXISTS info (
 					id SERIAL PRIMARY KEY ,
@@ -25,6 +29,9 @@ public class JdbcRunner {
 		String sql3 = """
 				DROP TABLE info;
 				 """;
+/*
+ *  006 Statement. DML операции
+*/
 		String sql4 = """
 				SELECT * FROM ticket
 				WHERE id=5;
@@ -37,24 +44,47 @@ public class JdbcRunner {
 		try (Connection connection = ConnectionManager.open();
 				Statement statement = connection.createStatement()
 			) {
+			System.out.println("--------004 Properties файл----------");
 			System.out.println(connection.getTransactionIsolation());
 			statement.execute(sql1);
+//			System.out.println("---------005 Statement. DDL операции--------");
 //			boolean executeResult = statement.execute(sql3);
 //			System.out.println(executeResult);
-			System.out.println("-------------");
-			ResultSet executeResultQuery = statement.executeQuery(sql4);
+			System.out.println("---------007 ResultSet. Операция SELECT--------");
+			ResultSet executeResultQuery = statement.executeQuery(sql4);  
 			while(executeResultQuery.next()) {
 				System.out.println(executeResultQuery.getLong("id"));
 				System.out.println(executeResultQuery.getString("passenger_no"));
 				System.out.println(executeResultQuery.getBigDecimal("cost"));
 				System.out.println("----------");
 			}
+			System.out.println("---------008 ResultSet. Generated keys--------");
 			int executeResultUpdate = statement.executeUpdate(sql5, Statement.RETURN_GENERATED_KEYS);
 			ResultSet generatedKeys = statement.getGeneratedKeys();
 			if (generatedKeys.next()) {
 				int generatedId = generatedKeys.getInt("id");
 				System.out.println(generatedId);
 			}
+			System.out.println("--------009 SQL Injection--------");
+			System.out.println(getTicketId("3"));
 		}		
+	}
+	
+	// 009 SQL Injection
+	private static List<Long> getTicketId(String query) throws SQLException {
+		String sql = """
+				SELECT id
+				FROM ticket
+				WHERE flight_id=%s
+				""".formatted(query);
+		List<Long> result = new ArrayList<>();
+		try (Connection connection = ConnectionManager.open();
+				Statement statement = connection.createStatement()) {
+			ResultSet resultSet = statement.executeQuery(sql);
+			while(resultSet.next()) {
+				result.add(resultSet.getLong("id"));
+			}
+		}
+		return result;
 	}
 }

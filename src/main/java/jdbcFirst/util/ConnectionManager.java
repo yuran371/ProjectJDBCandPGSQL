@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/*
+ * 003 Подключение к базам данных
+ */
+
 public final class ConnectionManager {
 	
 	private static final String PASSWORD_KEY = "db.password";

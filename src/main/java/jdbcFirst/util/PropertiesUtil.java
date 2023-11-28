@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/*
+ * 004 Properties файл
+ */
+
 public final class PropertiesUtil {
 
 	private static final Properties PROPERTIES = new Properties();
