@@ -1,9 +1,13 @@
 package jdbcFirst;
 
+import java.security.Timestamp;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +71,10 @@ public class JdbcRunner {
 			}
 			System.out.println("--------009 SQL Injection--------");
 			System.out.println(getTicketId("3"));
+			System.out.println("--------010 PreparedStatement. 1 example--------");
+			System.out.println(getTicketIdPreparedStatement1(2L));
+			System.out.println("--------010 PreparedStatement. 2 example--------");
+			System.out.println(getTicketIdPreparedStatement2(LocalDate.of(2020, 10, 1).atStartOfDay(), LocalDateTime.now()));
 		}		
 	}
 	
@@ -86,5 +94,45 @@ public class JdbcRunner {
 			}
 		}
 		return result;
+	}
+	
+	// 010 PreparedStatement
+		// Поиск id через один параметр Long
+	private static List<Long> getTicketIdPreparedStatement1(Long queryL) throws SQLException {
+		String sql = """
+				SELECT id
+				FROM ticket
+				WHERE flight_id = ?;
+				""";
+		List<Long> resultList = new ArrayList<>();
+		try(Connection connectionPrepared = ConnectionManager.open();
+		PreparedStatement preparedStatement = connectionPrepared.prepareStatement(sql)) {
+		preparedStatement.setLong(1, queryL);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			resultList.add(resultSet.getLong("id"));
+		}
+		return resultList;
+		}
+	}
+	
+	// Поиск id через два параметра: Timestemp(start, end)
+	private static List<Long>  getTicketIdPreparedStatement2(LocalDateTime queryStart, LocalDateTime queryEnd) throws SQLException {
+		String sql = """
+				SELECT id 
+				FROM flight
+				WHERE departure_date BETWEEN ? AND ?;
+				""";
+		List<Long> resultList = new ArrayList<>();
+		try (Connection connection = ConnectionManager.open();
+			 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setTimestamp(1, java.sql.Timestamp.valueOf(queryStart));
+			preparedStatement.setTimestamp(2, java.sql.Timestamp.valueOf(queryEnd));
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				resultList.add(resultSet.getLong("id"));
+			}
+		}
+		return resultList;
 	}
 }
