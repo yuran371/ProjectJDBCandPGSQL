@@ -1,8 +1,10 @@
-package jdbcFirst.util;
+package jdbcFirst;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import jdbcFirst.util.ConnectionManager;
 
 public class BatchTransactionRunner {
 	public static void main(String[] args) throws SQLException {

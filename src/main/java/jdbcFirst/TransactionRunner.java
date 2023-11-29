@@ -1,8 +1,10 @@
-package jdbcFirst.util;
+package jdbcFirst;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import jdbcFirst.util.ConnectionManager;
 
 /*
  * JDBC Аdvanced
