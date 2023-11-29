@@ -2,6 +2,7 @@ package jdbcFirst;
 
 import java.security.Timestamp;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,6 +76,8 @@ public class JdbcRunner {
 			System.out.println(getTicketIdPreparedStatement1(2L));
 			System.out.println("--------010 PreparedStatement. 2 example--------");
 			System.out.println(getTicketIdPreparedStatement2(LocalDate.of(2020, 10, 1).atStartOfDay(), LocalDateTime.now()));
+			System.out.println("--------002 MetaData (JDBC Advanced)--------");
+			checkMetaData();
 		}		
 	}
 	
@@ -138,5 +141,31 @@ public class JdbcRunner {
 			}
 		}
 		return resultList;
+	}
+	
+	/*
+	 * JDBC Аdvanced
+	 * 002 MetaData
+	 */
+	private static void checkMetaData() throws SQLException {
+		try (Connection connection = ConnectionManager.open()) {
+			DatabaseMetaData metaData = connection.getMetaData();
+			ResultSet catalog = metaData.getCatalogs();
+			
+			while(catalog.next()) {
+				String catalogString = catalog.getString(1);
+				System.out.println(catalogString);
+				ResultSet schemas = metaData.getSchemas();
+				while(schemas.next()) {
+					String schemaString = schemas.getString("TABLE_SCHEM");
+					System.out.println(schemaString);
+					ResultSet tables = metaData.getTables(catalogString, schemaString, "%", new String[] {"TABLE"});
+					while(tables.next()) {
+						String tableString = tables.getString("TABLE_NAME");
+						System.out.println(tableString);
+					}
+				}
+			}
+		} 
 	}
 }
