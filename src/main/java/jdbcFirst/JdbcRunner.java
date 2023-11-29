@@ -126,6 +126,10 @@ public class JdbcRunner {
 		List<Long> resultList = new ArrayList<>();
 		try (Connection connection = ConnectionManager.open();
 			 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			// 001 FetchSize (JDBC Аdvanced)
+			preparedStatement.setFetchSize(50);				// Количество строк, которое обработается на стороне java приложения
+			preparedStatement.setQueryTimeout(10);			// Время ограничения обработки запроса
+			preparedStatement.setMaxRows(100);				// Общее количество строк в одном запросе
 			preparedStatement.setTimestamp(1, java.sql.Timestamp.valueOf(queryStart));
 			preparedStatement.setTimestamp(2, java.sql.Timestamp.valueOf(queryEnd));
 			ResultSet resultSet = preparedStatement.executeQuery();
