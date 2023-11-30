@@ -23,7 +23,7 @@ public class BlobRunner {
 				WHERE id = 1
 				""";
 		
-		try(Connection connect = ConnectionManager.open();
+		try(Connection connect = ConnectionManager.get();
 			PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
 			preparedStatement.setBytes(1, Files.readAllBytes(Path.of("src\\main\\resources", "Boeing_777.jpg")));
 			preparedStatement.executeUpdate();

@@ -21,7 +21,7 @@ public class BatchTransactionRunner {
 		Statement statement = null;
 		
 		try {
-			connection = ConnectionManager.open();
+			connection = ConnectionManager.get();
 			
 			connection.setAutoCommit(false);
 			

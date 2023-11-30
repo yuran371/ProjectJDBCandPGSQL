@@ -28,7 +28,7 @@ public class TransactionRunner {
 		PreparedStatement preparedStatementTicket = null;
 		PreparedStatement preparedStatementFlight = null;
 		try {
-			connection = ConnectionManager.open(); 
+			connection = ConnectionManager.get(); 
 			
 			preparedStatementTicket = connection.prepareStatement(sql1);
 			preparedStatementFlight = connection.prepareStatement(sql2);
