@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import jdbcFirst.dao.TicketDao;
+import jdbcFirst.dto.TicketFilter;
 import jdbcFirst.entity.Ticket;
+import jdbcFirst.entity.TicketWithReference;
 
 /*
  * Data Access Object (DAO)
@@ -33,7 +35,25 @@ public class DaoRunner {
 //			ticketx.setCost(188l);
 //			ticketDao.update(ticketx);
 //		});
-		List<Ticket> findAll = ticketDao.findAll();
+//		List<Ticket> findAll = ticketDao.findAll();
+//		System.out.println(findAll);
+		
+		// 005 DAO. Batch SELECT с фильтрацией
+//		TicketFilter tf = new TicketFilter(3, 5);  		// ispravit` TicketFilter.java
+//		List<Ticket> findAll = ticketDao.findAll(tf);
+//		for (int i=0; i<findAll.size(); i++) {
+//			System.out.println(findAll.get(i));
+//		}
+		
+		// 005 DAO. Batch SELECT с фильтрацией; Second example
+//		TicketFilter tf2 = new TicketFilter(3, 5, null, "A1");
+//		List<Ticket> findAll2 = TicketDao.getInstance().findAll(tf2);
+//		for (int i=0; i<findAll2.size(); i++) {
+//			System.out.println(findAll2.get(i));
+//		}
+		
+		// 006 DAO. Сложный entity mapping
+		List<TicketWithReference> findAll = TicketDao.getInstance().findAllWithReference();
 		System.out.println(findAll);
 	}
 }
